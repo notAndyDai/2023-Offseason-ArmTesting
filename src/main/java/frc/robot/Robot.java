@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.HomeSequence;
+import frc.robot.commands.TestSequence;
 import frc.robot.subsystems.Arm;
 
 /**
@@ -35,7 +37,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     SmartDashboard.putData("Auto choices", m_chooser);
-    m_chooser.addOption("arm 30 degrees", new InstantCommand(() -> armSubsystem.setAngle(90)));
+    m_chooser.addOption("home and 90", new TestSequence());
+    m_chooser.addOption("arm 90 degrees", new InstantCommand(() -> armSubsystem.setAngle(90)));
+    m_chooser.addOption("arm 180 degrees", new InstantCommand(() -> armSubsystem.setAngle(180)));
+    m_chooser.addOption("home arm", new HomeSequence());
+    m_chooser.addOption("power test", new InstantCommand(() -> armSubsystem.setPower(-0.05)));
 
     SmartDashboard.putNumber("Arm encoder pos", armSubsystem.getPositionRaw());
     SmartDashboard.putNumber("Arm encoder setpoint", armSubsystem.angleToTicks(90));
@@ -63,17 +69,18 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putNumber("Arm encoder pos", armSubsystem.getPositionRaw());
+    SmartDashboard.putNumber("Arm angle", armSubsystem.getArmAngle());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    armSubsystem.setCoast();
   }
 
   @Override
   public void disabledPeriodic() {
-    armSubsystem.setCoast();
+
   }
 
   /**
@@ -88,7 +95,7 @@ public class Robot extends TimedRobot {
       m_chooser.getSelected().schedule();
     }
 
-    armSubsystem.setCoast();
+    armSubsystem.setBrake();
   }
 
   /** This function is called periodically during autonomous. */
@@ -111,6 +118,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    System.out.println(armSubsystem.getPositionRaw());
   }
 
   @Override

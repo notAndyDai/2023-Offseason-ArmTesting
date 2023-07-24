@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package frc.robot.Util;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -22,6 +22,8 @@ public final class Constants {
 
   public static final int MOTOR_TICKS_PER_REV = 2048;
   public static final double ARM_GEAR_RATIO = 129.26;
+
+  public static final double ARM_RESET_ANGLE_DEGREES = 57;
 
   // p: 0.086 i: 0.00001
 
